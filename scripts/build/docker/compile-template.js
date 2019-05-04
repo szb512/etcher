@@ -14,39 +14,48 @@
  * limitations under the License.
  */
 
-'use strict'
+"use strict";
 
 // This script generates Dockerfiles based on a template containing all
 // the necessary dependencies/ to run and build Etcher in multiple platforms.
 
-const _ = require('lodash')
-const fs = require('fs')
-const path = require('path')
-const currentDirectory = __dirname
+const _ = require("lodash");
+const fs = require("fs");
+const path = require("path");
+const currentDirectory = __dirname;
 
-const template = fs.readFileSync(path.join(currentDirectory, 'Dockerfile.template'), {
-  encoding: 'utf8'
-})
-
-_.each([
+const template = fs.readFileSync(
+  path.join(currentDirectory, "Dockerfile.template"),
   {
-    architecture: 'i686',
-    image: 'erwinchang/ubuntu-12.04-32bit-build'
-  },
-  {
-    architecture: 'x86_64',
-    image: 'ubuntu:12.04'
-  },
-  {
-    architecture: 'armv7hf',
-    image: 'resin/armv7hf-debian:jessie'
-  },
-  {
-    architecture: 'arm64',
-    image: 'resin/arm64-debian:jessie'
+    encoding: "utf8"
   }
-], (options) => {
-  const result = _.template(template)(options)
-  const filename = path.join(currentDirectory, `Dockerfile-${options.architecture}`)
-  fs.writeFileSync(filename, result)
-})
+);
+
+_.each(
+  [
+    {
+      architecture: "i686",
+      image: "erwinchang/ubuntu-12.04-32bit-build"
+    },
+    {
+      architecture: "x86_64",
+      image: "ubuntu:12.04"
+    },
+    {
+      architecture: "armv7hf",
+      image: "resin/armv7hf-debian:jessie"
+    },
+    {
+      architecture: "arm64",
+      image: "resin/arm64-debian:jessie"
+    }
+  ],
+  options => {
+    const result = _.template(template)(options);
+    const filename = path.join(
+      currentDirectory,
+      `Dockerfile-${options.architecture}`
+    );
+    fs.writeFileSync(filename, result);
+  }
+);
